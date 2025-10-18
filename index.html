@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>my-first-code Issue掲示板</title>
+  <meta name="description" content="GitHub Issues を掲示板ログとして読み込み、tkoma01/my-first-code の投稿を一覧表示します。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="board-header">
+    <div class="board-headline">
+      <p class="board-repo">tkoma01 / my-first-code</p>
+      <h1>GitHub Issue掲示板</h1>
+      <p class="board-intro">掲示板ログは GitHub Issues から読み込まれます。投稿ボタンから Issue を作成してください。</p>
+    </div>
+    <div class="board-actions">
+      <a class="button button--primary" href="https://github.com/tkoma01/my-first-code/issues/new/choose" target="_blank" rel="noopener">新規投稿</a>
+      <button class="button button--ghost" type="button" data-refresh>更新</button>
+    </div>
+  </header>
+
+  <main class="board-main" id="top">
+    <section class="board-controls">
+      <label class="control">
+        <span>ラベル</span>
+        <select id="label-filter">
+          <option value="">すべて</option>
+        </select>
+      </label>
+      <label class="control control--search">
+        <span>キーワード</span>
+        <input id="keyword" type="search" inputmode="search" autocomplete="off" placeholder="タイトルや本文を検索" />
+      </label>
+      <span id="status" class="status" role="status" aria-live="polite">読み込み中...</span>
+    </section>
+
+    <section class="board-list" id="issue-list" role="list" aria-live="polite">
+      <p class="board-placeholder">Issue を読み込んでいます...</p>
+    </section>
+  </main>
+
+  <footer class="board-footer">
+    <span>投稿は <a href="https://github.com/tkoma01/my-first-code/issues" target="_blank" rel="noopener">GitHub Issues</a> で管理されています。</span>
+  </footer>
+
+  <template id="issue-template">
+    <article class="issue-card" role="listitem">
+      <header class="issue-header">
+        <a class="issue-title" target="_blank" rel="noopener"></a>
+        <span class="issue-meta"></span>
+      </header>
+      <div class="issue-labels" hidden></div>
+      <p class="issue-body"></p>
+    </article>
+  </template>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
