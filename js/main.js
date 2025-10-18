@@ -118,10 +118,20 @@ function renderIssues(issues) {
 
 function createIssueCard(issue) {
   const fragment = issueTemplate.content.cloneNode(true);
+  const article = fragment.querySelector('.issue-card');
   const titleEl = fragment.querySelector('.issue-title');
   const metaEl = fragment.querySelector('.issue-meta');
   const bodyEl = fragment.querySelector('.issue-body');
   const labelsEl = fragment.querySelector('.issue-labels');
+
+  if (article) {
+    const hue = (issue.number * 47) % 360;
+    const hueSecondary = (hue + 48) % 360;
+    article.style.setProperty('--card-hue', `${hue}`);
+    article.style.setProperty('--card-hue-secondary', `${hueSecondary}`);
+    const stateColor = issue.state === 'open' ? 'var(--status-open)' : 'var(--status-closed)';
+    article.style.setProperty('--state-color', stateColor);
+  }
 
   if (titleEl) {
     titleEl.textContent = issue.title ?? '(タイトルなし)';
@@ -145,9 +155,9 @@ function createIssueCard(issue) {
         chip.textContent = rawLabel.name;
         if (rawLabel.color) {
           const color = `#${rawLabel.color}`;
-          chip.style.setProperty('background-color', applyAlpha(color, 0.18));
-          chip.style.setProperty('color', color);
-          chip.style.setProperty('border', `1px solid ${applyAlpha(color, 0.45)}`);
+          chip.style.setProperty('--label-base', applyAlpha(color, 0.55));
+          chip.style.setProperty('--label-border', applyAlpha(color, 0.48));
+          chip.style.color = getReadableTextColor(color);
         }
         labelsEl.append(chip);
       }
@@ -211,6 +221,26 @@ function applyAlpha(hex, alpha) {
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function getReadableTextColor(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return '#2f1a45';
+  const { r, g, b } = rgb;
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.65 ? '#3a1b4d' : '#fdf7ff';
+}
+
+function hexToRgb(hex) {
+  const normalized = hex.replace('#', '');
+  if (normalized.length !== 6) return null;
+  const bigint = Number.parseInt(normalized, 16);
+  if (Number.isNaN(bigint)) return null;
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255
+  };
 }
 
 function appendPlaceholder(text, className = 'board-placeholder') {
