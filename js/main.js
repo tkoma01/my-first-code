@@ -126,9 +126,11 @@ function createIssueCard(issue) {
 
   if (article) {
     const hue = (issue.number * 47) % 360;
-    const hueSecondary = (hue + 48) % 360;
+    const hueSecondary = (hue + 120) % 360;
+    const angle = 140 + (issue.number % 4) * 15;
     article.style.setProperty('--card-hue', `${hue}`);
     article.style.setProperty('--card-hue-secondary', `${hueSecondary}`);
+    article.style.setProperty('--card-angle', `${angle}deg`);
     const stateColor = issue.state === 'open' ? 'var(--status-open)' : 'var(--status-closed)';
     article.style.setProperty('--state-color', stateColor);
   }
